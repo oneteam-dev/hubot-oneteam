@@ -1,0 +1,45 @@
+{
+  "name": "hubot-oneteam",
+  "version": "1.0.0",
+  "description": "Oneteam Adapter for Hubot",
+  "main": "./src/oneteam",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oneteam-dev/hubot-oneteam.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oneteam-dev/hubot-oneteam/issues"
+  },
+  "keywords": [
+    "hubot",
+    "adapter",
+    "oneteam",
+    "collaboration",
+    "chat"
+  ],
+  "author": "Oneteam Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oneteam-dev/hubot-oneteam/issues"
+  },
+  "homepage": "https://github.com/oneteam-dev/hubot-oneteam#readme",
+  "dependencies": {
+    "pusher-node-client": "git+https://github.com/ngs/pusher-node-client.git#auth-endpoint"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "hubot": "^2.18.0",
+    "hubot-mock-adapter": "^1.0.0",
+    "mocha": "^2.4.5"
+  },
+  "contributors": [
+    {
+      "name": "Atsushi Nagase",
+      "email": "a@ngs.io",
+      "url": "http://ngs.io"
+    }
+  ]
+}
