@@ -6,6 +6,7 @@ class OneteamAdapter extends Adapter
     super robot
     @client = new Client clientOptions
     @robot.createTopic = (topic, callback) =>
+      console.info topic
       @team.createTopic topic, callback
 
   send: (envelope, strings...) ->
