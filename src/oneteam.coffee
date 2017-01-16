@@ -1,24 +1,40 @@
-{PusherClient} = require 'pusher-node-client'
-
-DEFAULT_PUSHER_CLIENT_KEY = 'd62fcfd64facee71a178':
-DEFAULT_API_BASE_URL = 'https://api.one-team.io'
+Client = require 'oneteam-client'
+{Robot, Adapter, User, EnterMessage, LeaveMessage, TopicMessage, TextMessage} = require 'hubot'
 
 class OneteamAdapter extends Adapter
-  constructor: (robot) ->
-    super @robot
-    @pusherClient = new PusherClient
-      key: process.env.HUBOT_ONETEAM_PUSHER_CLIENT_KEY || DEFAULT_PUSHER_CLIENT_KEY
-      authEndpoint: process.env.HUBOT_ONETEAM_PUSHER_AUTH_ENDPOINT || "#{DEFAULT_API_BASE_URL}/pusher/auth"
+  constructor: (robot, @teamName, clientOptions) ->
+    super robot
+    @client = new Client clientOptions
 
   send: (envelope, strings...) ->
+    {room} = envelope
+    room.createMessage strings.join('\n'), (err, res, m) =>
+      @robot.logger.info "Message created: #{m.key}"
 
   reply: (envelope, strings...) ->
+    {user, room} = envelope
+    text = strings.join '\n'
+    text = "@#{user_name} #{text}" if user_name = user?.user_name
+    room.createMessage text, (err, res, m) =>
+      @robot.logger.info "Message created: #{m.key}"
 
   topic: (envelope, strings...) ->
 
   run: ->
-    @pusherClient.on 'connect', =>
-      @emit 'connected'
+    @client.team @teamName, (err, t) =>
+      @team = t
+      t.on 'message:created', (m) =>
+        {createdBy} = m
+        console.info m, createdBy
+        user = new User createdBy.user_name, createdBy
+        message = new TextMessage user, m.body, m.key
+        message.rawMessage = m
+        message.topic = m.topic
+        message.room = m.topic
+        @receive message
+      t.subscribe =>
+        @emit 'connected'
 
   close: ->
 
+module.exports = OneteamAdapter

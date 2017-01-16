@@ -2,7 +2,7 @@
   "name": "hubot-oneteam",
   "version": "1.0.0",
   "description": "Oneteam Adapter for Hubot",
-  "main": "./src/oneteam",
+  "main": "./src",
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register --reporter spec"
   },
@@ -22,12 +22,9 @@
   ],
   "author": "Oneteam Inc.",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/oneteam-dev/hubot-oneteam/issues"
-  },
   "homepage": "https://github.com/oneteam-dev/hubot-oneteam#readme",
   "dependencies": {
-    "pusher-node-client": "git+https://github.com/ngs/pusher-node-client.git#auth-endpoint"
+    "oneteam-client": "0.0.1-beta.3"
   },
   "devDependencies": {
     "coffee-script": "^1.10.0",
