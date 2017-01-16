@@ -5,6 +5,8 @@ class OneteamAdapter extends Adapter
   constructor: (robot, @teamName, clientOptions) ->
     super robot
     @client = new Client clientOptions
+    @robot.createTopic = (topic, callback) =>
+      @team.createTopic topic, callback
 
   send: (envelope, strings...) ->
     {room} = envelope
@@ -19,10 +21,18 @@ class OneteamAdapter extends Adapter
       @robot.logger.info "Message created: #{m.key}"
 
   topic: (envelope, strings...) ->
+    {user, room} = envelope
+    body = strings.join '\n'
+    room.update {body}, (err, t) =>
+      if err
+        console.error err
+        return
+      @robot.logger.info "Topic updated: #{t.key}"
 
   run: ->
     @client.team @teamName, (err, t) =>
       @team = t
+      @robot.team = t
       t.on 'message:created', (m) =>
         {createdBy} = m
         console.info m, createdBy

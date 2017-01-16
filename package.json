@@ -24,7 +24,7 @@
   "license": "MIT",
   "homepage": "https://github.com/oneteam-dev/hubot-oneteam#readme",
   "dependencies": {
-    "oneteam-client": "0.0.1-beta.3"
+    "oneteam-client": "0.0.1-beta.5"
   },
   "devDependencies": {
     "coffee-script": "^1.10.0",
