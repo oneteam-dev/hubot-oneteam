@@ -1,23 +1,27 @@
 Client = require 'oneteam-client'
+{AllHtmlEntities} = require 'html-entities'
 {Robot, Adapter, User, EnterMessage, LeaveMessage, TopicMessage, TextMessage} = require 'hubot'
+
+encodeHTML = (strings) ->
+  return html if html = strings?[0]?.html
+  html = strings.join '\n'
+  new AllHtmlEntities().encode(html).replace /&lt;(\/)?web-card([^(?:&gt;)]+)&gt;/g, '<$1web-card$2>'
 
 class OneteamAdapter extends Adapter
   constructor: (robot, @teamName, clientOptions) ->
     super robot
     @client = new Client clientOptions
     @robot.createTopic = (topic, callback) =>
-      console.info topic
       @team.createTopic topic, callback
 
   send: (envelope, strings...) ->
-    {room} = envelope
-    room.createMessage strings.join('\n'), (err, res, m) =>
+    text = encodeHTML strings
+    room.createMessage text, (err, res, m) =>
       @robot.logger.info "Message created: #{m.key}"
 
   reply: (envelope, strings...) ->
     {user, room} = envelope
-    text = strings.join '\n'
-    text = "@#{user_name} #{text}" if user_name = user?.user_name
+    text = "@#{user_name} #{encodeHTML strings}" if user_name = user?.user_name
     room.createMessage text, (err, res, m) =>
       @robot.logger.info "Message created: #{m.key}"
 
@@ -36,7 +40,6 @@ class OneteamAdapter extends Adapter
       @robot.team = t
       t.on 'message:created', (m) =>
         {createdBy} = m
-        console.info m, createdBy
         user = new User createdBy.user_name, createdBy
         message = new TextMessage user, m.body, m.key
         message.rawMessage = m
