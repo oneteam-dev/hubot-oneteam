@@ -3,6 +3,7 @@ Client = require 'oneteam-client'
 {Robot, Adapter, User, EnterMessage, LeaveMessage, TopicMessage, TextMessage} = require 'hubot'
 
 encodeHTML = (strings) ->
+  console.info strings
   return html if html = strings?[0]?.html
   html = strings.join '\n'
   new AllHtmlEntities().encode(html).replace /&lt;(\/)?web-card([^(?:&gt;)]+)&gt;/g, '<$1web-card$2>'
